@@ -1,6 +1,8 @@
-select * from bronze.crm_cust_info;
+select * from bronze.crm_cust_info
 
+------------------------------------------------------------------------------------------------------
 --checking the null and duplicate values in primary key
+------------------------------------------------------------------------------------------------------
 
 select cst_id,count(*) from bronze.crm_cust_info group by cst_id having count(*)>1 or cst_id is null;
 
@@ -14,7 +16,9 @@ with cte as (
 )
 select * from cte where latest_flag = 1;
 
+------------------------------------------------------------------------------------------------------
 --checking the unwanted spaces in columns 
+------------------------------------------------------------------------------------------------------
 
 select cst_firstname, cst_lastname from bronze.crm_cust_info 
 where cst_firstname != trim(cst_firstname) or cst_lastname != trim(cst_lastname) ;
@@ -37,7 +41,9 @@ SELECT
 	cst_create_date
 FROM cte WHERE latest_flag = 1;
 
+------------------------------------------------------------------------------------------------------
 --checking the data consistency 
+------------------------------------------------------------------------------------------------------
 
 select distinct cst_gndr from bronze.crm_cust_info ;
 select distinct cst_marital_status from bronze.crm_cust_info;
@@ -68,7 +74,9 @@ SELECT
 	cst_create_date
 FROM cte WHERE latest_flag = 1;
 
+------------------------------------------------------------------------------------------------------
 --checking the data in date field is valid or not
+------------------------------------------------------------------------------------------------------
 
 select 
 	cst_create_date,
