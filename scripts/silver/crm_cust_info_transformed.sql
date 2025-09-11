@@ -65,11 +65,11 @@ SELECT
     trim(cst_lastname) as cst_lastname,
     case	when upper(trim(cst_marital_status)) = 'S' then 'Single'
 			when upper(trim(cst_marital_status)) = 'M' then 'Married'
-			else 'NA'
+			else 'N/A'
 	end as cst_marital_status,
     case	when upper(trim(cst_gndr)) = 'F' then 'Female'
 			when upper(trim(cst_gndr)) = 'M' then 'Male'
-			else 'NA'
+			else 'N/A'
 	end as cst_gndr,
 	cst_create_date
 FROM cte WHERE latest_flag = 1;
@@ -88,6 +88,7 @@ from bronze.crm_cust_info;
 ------------------------------------------------------------------------------------------------------
 --to insert the correct data ainto silver table after transforming and cleaning
 ------------------------------------------------------------------------------------------------------
+TRUNCATE TABLE [silver].[crm_cust_info];
 
 INSERT INTO [silver].[crm_cust_info]
            ([cst_id]
@@ -106,12 +107,12 @@ SELECT
     CASE 
         WHEN UPPER(TRIM(cst_marital_status)) = 'S' THEN 'Single'
         WHEN UPPER(TRIM(cst_marital_status)) = 'M' THEN 'Married'
-        ELSE 'NA'
+        ELSE 'N/A'
     END AS cst_marital_status,
     CASE 
         WHEN UPPER(TRIM(cst_gndr)) = 'F' THEN 'Female'
         WHEN UPPER(TRIM(cst_gndr)) = 'M' THEN 'Male'
-        ELSE 'NA'
+        ELSE 'N/A'
     END AS cst_gndr,
     cst_create_date,
 	GETDATE()
@@ -124,4 +125,18 @@ FROM (
 ) AS sub
 WHERE latest_flag = 1;
 
+
+------------------------------------------------------------------------------------------------------
+--Final validation for the silver laer table
+------------------------------------------------------------------------------------------------------
+
 select * from silver.[crm_cust_info];
+
+select cst_id,count(*) from silver.[crm_cust_info] group by cst_id having count(*)>1 or cst_id is null;
+
+select distinct cst_gndr from silver.[crm_cust_info] ;
+
+select distinct cst_marital_status from silver.[crm_cust_info];
+
+select cst_firstname, cst_lastname from silver.[crm_cust_info] 
+where cst_firstname != trim(cst_firstname) or cst_lastname != trim(cst_lastname) ;
