@@ -1,8 +1,6 @@
-select * from bronze.erp_cust_az12
+select * from bronze.erp_cust_az12;
 
-select * from silver.crm_cust_info
-select * from silver.erp_cust_az12
-
+select * from silver.crm_cust_info;
 ------------------------------------------------------------------------------------------------------
 --checking the null and duplicate values in primary key
 ------------------------------------------------------------------------------------------------------
@@ -18,13 +16,13 @@ select
 	replace(trim(cid),'NAS','') as cid
 	,[bdate]
 	,gen
-from bronze.erp_cust_az12
+from bronze.erp_cust_az12;
 
 ------------------------------------------------------------------------------------------------------
 --checking the distinct value in gender
 ------------------------------------------------------------------------------------------------------
 
-select distinct gen from bronze.erp_cust_az12
+select distinct gen from bronze.erp_cust_az12;
 
 ---Tranforming the data 
 
@@ -35,12 +33,12 @@ select
 			when upper(trim(gen))='F' or upper(trim(gen))='FEMALE' then 'Female'
 			else 'N/A'
 	end as gen
-from bronze.erp_cust_az12
+from bronze.erp_cust_az12;
 
 ------------------------------------------------------------------------------------------------------
 --checking the date fields
 ------------------------------------------------------------------------------------------------------
-select bdate from bronze.erp_cust_az12 where bdate is null or (YEAR(bdate)<='1924' and YEAR(bdate)>= YEAR(GETDATE()))
+select bdate from bronze.erp_cust_az12 where bdate is null or (YEAR(bdate)<='1924' and YEAR(bdate)>= YEAR(GETDATE()));
 
 ---Tranforming the data 
 
@@ -51,7 +49,7 @@ select
 			when upper(trim(gen))='F' or upper(trim(gen))='FEMALE' then 'Female'
 			else 'N/A'
 	end as gen
-from bronze.erp_cust_az12
+from bronze.erp_cust_az12;
 
 ------------------------------------------------------------------------------------------------------
 --to insert the correct data ainto silver table after transforming and cleaning
@@ -64,7 +62,7 @@ CREATE TABLE [silver].[erp_cust_az12](
 	[bdate] [date] NULL,
 	[gen] [nvarchar](50) NULL,
 	[dwh_created_date] [datetime] NULL
-) ON [PRIMARY]
+) ON [PRIMARY];
 
 
 INSERT INTO [silver].[erp_cust_az12]
@@ -81,7 +79,7 @@ select
 			else 'N/A'
 	end as gen
 	,GETDATE()
-from bronze.erp_cust_az12
+from bronze.erp_cust_az12;
 
 ------------------------------------------------------------------------------------------------------
 --Final validation for the silver layer table
@@ -90,3 +88,5 @@ from bronze.erp_cust_az12
 select * from silver.erp_cust_az12;
 
 select * from silver.erp_cust_az12 where cid is null or bdate is null or gen is null;
+
+select distinct gen from silver.erp_cust_az12;
