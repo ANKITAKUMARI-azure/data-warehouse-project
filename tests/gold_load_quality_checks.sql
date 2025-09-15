@@ -16,3 +16,16 @@ select distinct marital_status from gold.dim_customers;
 
 select * from gold.dim_products;
 
+-- ================================================================================
+--		Quality check for gold fact sales table
+-- ================================================================================
+
+select * from gold.fact_sales;
+
+SELECT *
+from gold.fact_sales f1
+LEFT JOIN gold.dim_customers d1
+ON f1.customer_key = d1.customer_key
+LEFT JOIN gold.dim_products d2
+ON f1.product_key = d2.product_key
+where d2.product_key is null or f1.customer_key is null
