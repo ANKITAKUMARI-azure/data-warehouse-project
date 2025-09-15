@@ -21,7 +21,7 @@ ON s1.sls_prd_key = g2.product_number
 
 SELECT [sls_ord_num] as order_number
 	  ,pr.product_key as product_key
-	  ,cu.customer_key as customer_id
+	  ,cu.customer_key as customer_key
       ,[sls_order_dt] as order_date
       ,[sls_ship_dt] as shipping_date
       ,[sls_due_dt] as due_date
@@ -41,7 +41,7 @@ ON s1.sls_prd_key = pr.product_number
 create view gold.fact_sales as
 SELECT [sls_ord_num] as order_number
 	  ,pr.product_key as product_key
-	  ,cu.customer_key as customer_id
+	  ,cu.customer_key as customer_key
       ,[sls_order_dt] as order_date
       ,[sls_ship_dt] as shipping_date
       ,[sls_due_dt] as due_date
